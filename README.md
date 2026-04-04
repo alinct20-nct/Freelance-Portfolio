@@ -1,21 +1,34 @@
-# Hi there, I'm Ali! 👋 
+# Hi there, I'm Ali! 🚀
 
-I'm a self-driven **Cybersecurity Learner** and an aspiring **Purple Team Analyst**. I focus on bridging the gap between offensive tactics and defensive strategies by mapping real-world labs to global frameworks.
-
-### 🛡️ What I'm working on:
-* **Advanced Reconnaissance:** Mastering stealth scanning techniques with Nmap.
-* **Threat Mapping:** Aligning lab executions with the **MITRE ATT&CK** framework.
-* **Network Engineering:** Building secure lab environments and analyzing traffic.
-
-### 🛠️ Tech Stack:
-* **OS:** Kali Linux, Ubuntu.
-* **Networking:** TCP/IP, DNS, ARP analysis, Network Topologies.
-* **Security Tools:** Nmap, Arp-scan, Metasploit.
-* **Frameworks:** MITRE ATT&CK.
-
-### 📈 Latest Labs:
-* **[Nmap & MITRE ATT&CK Mapping]:** A hands-on lab focused on stealth service discovery and tactical documentation.
-* **[Networking Fundamentals]:** Documentation of core networking protocols and infrastructure.
+### 🌟 VIP AI Prompting Expert & Full-Stack Web Developer
+I bridge the gap between human creativity and AI power to build high-quality, modern web applications in record time.
 
 ---
-*"Security is not just about tools; it's about the strategy behind the execution."*
+
+### 🛠️ What I Bring to the Table:
+* **VIP AI Prompting:** Expert in engineering complex prompts for software development, debugging, and system architecture.
+* **Web Development:** Crafting responsive and dynamic user interfaces using **HTML5, CSS3, and JavaScript**.
+* **AI-Driven Solutions:** Utilizing advanced AI tools (like Windsurf) to maintain high design fidelity and clean code.
+
+---
+
+### 🏗️ Projects I'm Building:
+* **KickZone:** A comprehensive sports facility management system with dynamic filtering and professional dashboards.
+* **Modern Web Solutions:** Professional landing pages and dashboards designed for optimal user experience.
+
+---
+
+### 💻 Tech Stack:
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) 
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) 
+![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black) 
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![AI Prompting](https://img.shields.io/badge/AI%20Prompting-VIP-blueviolet?style=for-the-badge)
+
+---
+
+### 📫 Connect with Me:
+* **Looking for a developer?** Let's build something amazing together!
+* *Available for freelance projects and AI-integrated development.*
+
+---
