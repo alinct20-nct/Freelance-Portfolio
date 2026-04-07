@@ -15,7 +15,7 @@ I bridge the gap between human creativity and AI power to build high-quality, mo
 ### 🏗️ Projects I'm Building:
 * **KickZone:** A comprehensive sports facility management system with dynamic filtering and professional dashboards.
 * **Modern Web Solutions:** Professional landing pages and dashboards designed for optimal user experience.
-
+🚀 **[Live Demo: Experience KickZone Here](https://alinct20-nct.github.io/Freelance-Portfolio/KickZone/Code/index.html)**
 ---
 
 ### 💻 Tech Stack:
