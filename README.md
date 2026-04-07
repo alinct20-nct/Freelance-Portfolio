@@ -29,7 +29,7 @@ I bridge the gap between human creativity and AI power to build high-quality, mo
 
 ### 📫 Connect with Me:
 * **Looking for a developer?** Let's build something amazing together!
-* *Available for freelance projects and AI-integrated development.*
+* *Available for freelance projects and AI-integrated development.
 
 ---
 ## 🖼️ Project Preview
