@@ -35,4 +35,4 @@ I bridge the gap between human creativity and AI power to build high-quality, mo
 ## 🖼️ Project Preview
 | Landing Page | Interactive Map | Admin Dashboard |
 | :---: | :---: | :---: |
-| ![Landing](../KickZone/Designs/Kickzone%20Landing%20Page.jpg) | ![Map](./KickZone/Designs/Discover%20Fields%20-%20Interactive%20Map.jpg) | ![Dashboard](./KickZone/Designs/Field%20Admin%20Dashboard.jpg) |
+|![KickZone Landing](./Kickzone%20Landing%20Page.jpg) | ![Map](./KickZone/Designs/Discover%20Fields%20-%20Interactive%20Map.jpg) | ![Dashboard](./KickZone/Designs/Field%20Admin%20Dashboard.jpg) |
