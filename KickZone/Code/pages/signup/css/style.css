@@ -1,0 +1,494 @@
+/* الأنماط الأساسية */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif; /* الخط مطابق للصورة */
+}
+
+body {
+    background-color: #121212;
+    color: #E0E0E0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-top: 80px; /* مساحة للشريط العلوي */
+}
+
+/* حاوية الخلفية */
+.main-container {
+    width: 100vw;
+    min-height: calc(100vh - 80px); /* خصم ارتفاع الشريط العلوي */
+    background-image: url('./images/Background.png'); /* صورة الخلفية الجديدة */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -80px; /* تعويض للشريط العلوي */
+    padding: 20px 0; /* إضافة مساحة داخلية */
+}
+
+/* طبقة التعتيم لجعل الحاوية تظهر بوضوح */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* تعتيم مطابق للصورة */
+    z-index: 1;
+}
+
+/* حاوية تسجيل الدخول (الشكل المستطيل) */
+.signin-container {
+    background-color: rgba(20, 26, 22, 0.85); /* لون الخلفية الغامق والمائل للأخضر مع شفافية */
+    backdrop-filter: blur(5px); /* تأثير ضبابي خفيف للخلفية */
+    width: 450px; /* زيادة العرض قليلاً */
+    max-width: 90vw; /* استجابة للشاشات الصغيرة */
+    padding: 45px; /* زيادة الحشو */
+    border-radius: 15px; /* زيادة التقريب */
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); /* زيادة الظل */
+    margin: 20px;
+    animation: fadeInUp 0.6s ease-out; /* حركة دخول */
+    flex-shrink: 0; /* منع الانكماش */
+}
+
+/* شعارKickzoneالعلوي */
+.logo-circle {
+    width: 55px; /* زيادة الحجم */
+    height: 55px;
+    background-color: #0E2919;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite; /* حركة نبض */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logo-circle:hover {
+    transform: scale(1.1);
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 36px; /* زيادة الحجم */
+    line-height: 1.2;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 12px;
+    animation: fadeIn 1s ease-out; /* حركة ظهور */
+}
+
+h1::after {
+    content: " .";
+    color: #00C853;
+}
+
+.subtitle {
+    font-size: 16px; /* زيادة الحجم */
+    color: #00C853; /* اللون الأخضر المميز */
+    text-align: center;
+    margin-bottom: 25px;
+    animation: fadeIn 1.2s ease-out; /* حركة ظهور متأخرة */
+    font-weight: 500;
+}
+
+/* الأنماط الخاصة بالحقول */
+form {
+    width: 100%;
+    animation: fadeIn 0.8s ease-out; /* حركة ظهور النموذج */
+}
+
+.input-group {
+    margin-bottom: 20px; /* زيادة المسافة */
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+label {
+    display: block;
+    color: #BDBDBD;
+    font-size: 14px; /* زيادة الحجم */
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.forgot-link {
+    color: #00C853;
+    font-size: 13px; /* زيادة الحجم */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+.input-field {
+    position: relative;
+    width: 100%;
+}
+
+.input-field input {
+    width: 100%;
+    background-color: #171E19; /* لون حقل الإدخال */
+    border: 1px solid #333333;
+    border-radius: 10px; /* زيادة التقريب */
+    padding: 16px 16px 16px 50px; /* زيادة الحشو */
+    color: #FFFFFF;
+    font-size: 15px; /* زيادة الحجم */
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-field input:focus {
+    border-color: #00C853;
+}
+
+.input-field .icon {
+    position: absolute;
+    left: 16px; /* زيادة المسافة */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input-field .icon-right {
+    position: absolute;
+    right: 16px; /* زيادة المسافة */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.input-field input {
+    width: 100%;
+    background-color: #171E19; /* لون حقل الإدخال */
+    border: 1px solid #333333;
+    border-radius: 10px; /* زيادة التقريب */
+    padding: 16px 16px 16px 50px; /* زيادة الحشو */
+    color: #FFFFFF;
+    font-size: 15px; /* زيادة الحجم */
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-field input::placeholder {
+    color: #757575;
+}
+
+.input-field input:focus {
+    border-color: #00C853;
+}
+
+/* خيار "تذكر هذا الجهاز" */
+.remember-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px; /* زيادة المسافة */
+}
+
+.remember-row input {
+    width: 20px; /* زيادة الحجم */
+    height: 20px;
+    margin-right: 12px;
+    background-color: #171E19;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    accent-color: #00C853; /* يجعل لون علامة الصح أخضر */
+}
+
+.remember-row label {
+    margin-bottom: 0;
+    font-size: 14px; /* زيادة الحجم */
+}
+
+/* زر تسجيل الدخول */
+.signin-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #00C853, #00E676); /* خلفية متدرجة */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px; /* زيادة التقريب */
+    padding: 18px; /* زيادة الحشو */
+    font-size: 16px; /* زيادة الحجم */
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 30px; /* زيادة المسافة */
+    transition: 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.signin-btn:hover {
+    background: linear-gradient(135deg, #00E676, #00C853); /* عكس التدرج عند التمرير */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 200, 83, 0.4);
+}
+
+.signin-btn:active {
+    transform: translateY(0);
+}
+
+/* الفاصل (أو قم بالمتابعة عبر) */
+.or-divider {
+    width: 100%;
+    position: relative;
+    text-align: center;
+    margin-bottom: 25px; /* زيادة المسافة */
+}
+
+.or-divider span {
+    background-color: #141A16; /* نفس لون حاوية تسجيل الدخول */
+    padding: 0 12px;
+    color: #757575;
+    font-size: 12px; /* زيادة الحجم */
+    position: relative;
+    z-index: 2;
+    letter-spacing: 0.5px;
+}
+
+.or-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #333333;
+    z-index: 1;
+}
+
+/* أزرار التسجيل الاجتماعي */
+.social-btns {
+    width: 100%;
+    display: flex;
+    gap: 18px; /* زيادة المسافة */
+    margin-bottom: 30px; /* زيادة المسافة */
+    justify-content: center;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px; /* زيادة التقريب */
+    padding: 12px; /* زيادة الحشو */
+    color: #E0E0E0;
+    font-size: 15px; /* زيادة الحجم */
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.social-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #00C853;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+}
+
+.social-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.social-btn.google img {
+    margin-top: 1px;
+}
+
+/* سطر التسجيل الجديد */
+.signup-row {
+    font-size: 14px; /* زيادة الحجم */
+    color: #BDBDBD;
+}
+
+.signup-row a {
+    color: #00C853;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signup-row a:hover {
+    text-decoration: underline;
+}
+
+/* روابط الفوتر السفلي */
+.footer-links {
+    position: absolute;
+    bottom: 25px; /* زيادة المسافة */
+    z-index: 2;
+    display: flex;
+    gap: 25px; /* زيادة المسافة */
+}
+
+.footer-links a {
+    color: #00C853;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* استجابة للشاشات المتوسطة */
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+    }
+    
+    .main-container {
+        height: calc(100vh - 60px);
+        margin-top: -60px;
+    }
+    
+    .signin-container {
+        width: 400px;
+        padding: 35px;
+        margin: 15px;
+    }
+    
+    h1 {
+        font-size: 32px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+}
+
+/* استجابة للشاشات الصغيرة */
+@media (max-width: 480px) {
+    body {
+        padding-top: 50px;
+    }
+    
+    .main-container {
+        height: calc(100vh - 50px);
+        margin-top: -50px;
+    }
+    
+    .signin-container {
+        width: 100%;
+        max-width: 350px;
+        padding: 30px 25px;
+        margin: 10px;
+    }
+    
+    h1 {
+        font-size: 28px;
+    }
+    
+    .logo-circle {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 20px;
+    }
+    
+    .social-btns {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 15px;
+        bottom: 20px;
+    }
+}
+
+.footer-links a {
+    color: #757575;
+    text-decoration: none;
+    font-size: 13px; /* زيادة الحجم */
+}
+
+.footer-links a:hover {
+    color: #E0E0E0;
+}
+
+/* استجابة للشاشات المتوسطة */
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+    }
+    
+    .main-container {
+        height: calc(100vh - 60px);
+        margin-top: -60px;
+    }
+    
+    .signin-container {
+        width: 400px;
+        padding: 35px;
+        margin: 15px;
+    }
+    
+    h1 {
+        font-size: 32px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+}
+
+/* استجابة للشاشات الصغيرة */
+@media (max-width: 480px) {
+    body {
+        padding-top: 50px;
+    }
+    
+    .main-container {
+        height: calc(100vh - 50px);
+        margin-top: -50px;
+    }
+    
+    .signin-container {
+        width: 100%;
+        max-width: 350px;
+        padding: 30px 25px;
+        margin: 10px;
+    }
+    
+    h1 {
+        font-size: 28px;
+    }
+    
+    .logo-circle {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 20px;
+    }
+    
+    .social-btns {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 15px;
+        bottom: 20px;
+    }
+}

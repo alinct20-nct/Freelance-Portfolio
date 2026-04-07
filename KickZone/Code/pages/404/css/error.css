@@ -1,0 +1,79 @@
+/* 404 Page */
+.error-container {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #0a110d 0%, #0f1a15 100%);
+}
+
+.error-content {
+    text-align: center;
+    max-width: 500px;
+}
+
+.error-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.error-logo .logo-icon {
+    width: 60px;
+    height: 60px;
+    background: url('../images/Background+Shadow.svg') center/cover;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.4);
+}
+
+.error-logo .logo-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.error-code {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 900;
+    font-size: 4.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    letter-spacing: -3.6px;
+}
+
+.error-title {
+    font-family: 'Lexend', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .error-actions .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+}

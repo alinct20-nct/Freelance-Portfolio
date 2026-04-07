@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KickZone - Page Not Found</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/error.css">
+    <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="nav-logo" onclick="window.location.href='../landing/index.html'">
+                    <div class="logo-icon"></div>
+                    <span class="logo-text">KickZone</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="../landing/index.html#features" class="nav-link" data-i18n="nav.features">Features</a>
+                    <a href="../landing/index.html#how-it-works" class="nav-link" data-i18n="nav.how-it-works">How It Works</a>
+                    <a href="../landing/index.html#popular-fields" class="nav-link" data-i18n="nav.popular-fields">Popular Fields</a>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <div class="lang-toggle" onclick="toggleLanguage()">
+                    <span id="current-lang">EN</span>
+                    <span>🌐</span>
+                </div>
+                <button class="nav-btn primary" onclick="window.location.href='../login/index.html'" data-i18n="nav.login">Login</button>
+                <button class="nav-btn secondary" onclick="window.location.href='../signup/index.html'" data-i18n="nav.signup">Sign Up</button>
+                <div class="nav-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 404 Page -->
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-logo">
+                <div class="logo-icon"></div>
+            </div>
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title" data-i18n="404.title">Page Not Found</h2>
+            <p class="error-message" data-i18n="404.message">Sorry! The page you're looking for doesn't exist. It might have been moved or deleted.</p>
+            <div class="error-actions">
+                <button class="btn btn-primary" onclick="window.location.href='../landing/index.html'" data-i18n="404.home">Go to Home</button>
+                <button class="btn btn-secondary" onclick="goBack()" data-i18n="404.back">Go Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon"></div>
+                    <span>KickZone</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
+                    <a href="#" data-i18n="footer.terms">Terms of Service</a>
+                    <a href="#" data-i18n="footer.help">Help Center</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#" data-i18n="footer.facebook">Facebook</a>
+                    <a href="#" data-i18n="footer.twitter">Twitter</a>
+                    <a href="#" data-i18n="footer.instagram">Instagram</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="footer.copyright">&copy; 2024 KickZone. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/common.js"></script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>
