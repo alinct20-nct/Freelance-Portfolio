@@ -1,0 +1,261 @@
+/**
+ * ========================================
+ * أنماط دعم الكتابة من اليمين واليسار (RTL/LTR)
+ * ========================================
+ * لماذا هذا الملف موجود:
+ * - العربية تُكتب من اليمين لليسار (RTL)
+ * - الإنجليزية تُكتب من اليسار لليمين (LTR)
+ * - الصفحة تحتاج لتعديلات مختلفة لكل لغة
+ * - هذا الملف يتعامل مع هذه الفروقات البصرية
+ */
+
+/**
+ * ========================================
+ * تعيين اتجاه الصفحة (Direction)
+ * ========================================
+ * لماذا موجود:
+ * - إخبار المتصفح باتجاه القراءة
+ * - تطبيق الاتجاه على جميع العناصر الفرعية
+ */
+
+/* عندما تكون الصفحة باللغة العربية (RTL) */
+[dir="rtl"] {
+    direction: rtl; /* اتجاه القراءة من اليمين */
+    unicode-bidi: embed; /* تضمين اتجاه النصوص */
+}
+
+/* عندما تكون الصفحة باللغة الإنجليزية (LTR) */
+[dir="ltr"] {
+    direction: ltr; /* اتجاه القراءة من اليسار */
+    unicode-bidi: embed; /* تضمين اتجاه النصوص */
+}
+
+/**
+ * ========================================
+ * محاذاة النصوص (Text Alignment)
+ * ========================================
+ * لماذا موجود:
+ * - النصوص العربية يجب أن تُحاذى على اليمين
+ * - النصوص الإنجليزية يجب أن تُحاذى على اليسار
+ */
+
+/* عندما تكون الفئة lang-ar (لغة عربية) والنص يجب أن يكون من اليسار */
+body.lang-ar .text-left {
+    text-align: right !important; /* تحويل المحاذاة لليمين */
+}
+
+/* عندما تكون الفئة lang-ar (لغة عربية) والنص يجب أن يكون من اليمين */
+body.lang-ar .text-right {
+    text-align: left !important; /* تحويل المحاذاة لليسار */
+}
+
+/* عندما تكون الفئة lang-en (لغة إنجليزية) والنص يجب أن يكون من اليمين */
+body.lang-en .text-right {
+    text-align: right !important; /* محاذاة على اليمين */
+}
+
+/* عندما تكون الفئة lang-en (لغة إنجليزية) والنص يجب أن يكون من اليسار */
+body.lang-en .text-left {
+    text-align: left !important; /* محاذاة على اليسار */
+}
+
+/**
+ * ========================================
+ * تعديلات التنقل (Navigation Adjustments)
+ * ========================================
+ * لماذا موجود:
+ * - في RTL: ترتيب عناصر التنقل يجب أن يكون معكوسا
+ * - حتى لا تظهر الأيقونات في الجانب الخاطئ
+ */
+
+/* في الصفحات RTL: عكس ترتيب عناصر التنقل */
+[dir="rtl"] nav .flex.items-center.gap-8 {
+    flex-direction: row-reverse; /* عكس الترتيب */
+}
+
+/* في الصفحات RTL: عكس ترتيب أزرار الإجراءات */
+[dir="rtl"] .flex.items-center.gap-4:last-child {
+    flex-direction: row-reverse; /* عكس الترتيب */
+}
+
+/**
+ * ========================================
+ * تأثيرات البطاقات الزجاجية (Glass Cards)
+ * ========================================
+ * لماذا موجود:
+ * - تطبيق انتقالات سلسة على البطاقات
+ * - التأكد من أن اتجاه البطاقات يتبع اتجاه الصفحة
+ */
+
+.glass-card {
+    transition: all 0.3s ease; /* انتقال سلس لجميع التغييرات */
+}
+
+/* التأكد من أن اتجاه البطاقة RLT في الصفحات العربية */
+[dir="rtl"] .glass-card {
+    direction: rtl;
+}
+
+/* التأكد من أن اتجاه البطاقة LTR في الصفحات الإنجليزية */
+[dir="ltr"] .glass-card {
+    direction: ltr;
+}
+
+/**
+ * ========================================
+ * عرض السعر (Price Display)
+ * ========================================
+ * لماذا موجود:
+ * - السعر يجب أن يحافظ على سطر واحد
+ * - ترتيب المسافات حول السعر يختلف حسب الاتجاه
+ */
+
+.price-display {
+    white-space: nowrap; /* منع فواصل الأسطر */
+}
+
+/* في الصفحات RTL: وضع المسافة على يسار السعر */
+[dir="rtl"] .price-display span {
+    margin-left: auto;
+    margin-right: 0.5rem;
+}
+
+/* في الصفحات LTR: وضع المسافة على يمين السعر */
+[dir="ltr"] .price-display span {
+    margin-left: 0.5rem;
+    margin-right: auto;
+}
+
+/**
+ * ========================================
+ * زر تبديل اللغة (Language Toggle Button)
+ * ========================================
+ * لماذا موجود:
+ * - إضافة تأثير بصري جميل عند تمرير الماوس
+ * - إنشاء موجة ضوء تنبض من الزر
+ */
+
+.lang-toggle {
+    position: relative;
+    overflow: hidden; /* إخفاء أي عنصر يخرج من الزر */
+}
+
+/* تأثير النبض عند تمرير الماوس على الزر */
+.lang-toggle:hover::after {
+    content: ''; /* إنشاء عنصر افتراضي */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(29, 185, 84, 0.1); /* لون النبض */
+    animation: pulse 0.6s ease-out; /* تشغيل الرسم المتحرك */
+}
+
+/**
+ * رسم متحرك: موجة نبض تنبض من المركز
+ * لماذا موجود: إضافة تأثير بصري جميل وموناسب لتفاعل المستخدم
+ */
+@keyframes pulse {
+    0% {
+        transform: scale(1); /* البداية: الحجم الطبيعي */
+        opacity: 1; /* شفافية كاملة */
+    }
+    100% {
+        transform: scale(1.2); /* النهاية: أكبر قليلاً */
+        opacity: 0; /* اختفاء تام (شفاف تماماً) */
+    }
+}
+
+/**
+ * ========================================
+ * انتقالات سلسة عند تغيير اللغة
+ * ========================================
+ * لماذا موجود:
+ * - عند تغيير اللغة: النصوص تتلاشى وتظهر بشكل سلس
+ * - لا تحدث قفزات مفاجئة في النصوص
+ * - تحسين تجربة المستخدم بصرياً
+ */
+
+[data-translate],
+[data-translate-placeholder],
+[data-translate-alt] {
+    transition: opacity 0.2s ease; /* انتقال سلس للشفافية */
+}
+
+/* RTL adjustments for icons and buttons */
+[dir="rtl"] .material-symbols-outlined {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Flex row reverse for RTL contexts */
+[dir="rtl"] .flex.flex-wrap {
+    flex-direction: row-reverse;
+}
+
+/* District buttons alignment */
+[dir="rtl"] .flex.flex-wrap.gap-3 button {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+[dir="ltr"] .flex.flex-wrap.gap-3 button {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+/* Hero section text alignment */
+[dir="rtl"] h1,
+[dir="rtl"] p {
+    text-align: right;
+}
+
+[dir="ltr"] h1,
+[dir="ltr"] p {
+    text-align: left;
+}
+
+/* Search input RTL support */
+[dir="rtl"] input[placeholder] {
+    text-align: right;
+    padding-right: 40px;
+}
+
+[dir="ltr"] input[placeholder] {
+    text-align: left;
+    padding-left: 40px;
+}
+
+/* Footer text alignment */
+[dir="rtl"] footer {
+    text-align: right;
+}
+
+[dir="ltr"] footer {
+    text-align: left;
+}
+
+/* Location text alignment for pitch cards */
+[dir="rtl"] .flex.items-center.text-on-surface-variant {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .flex.items-center.text-on-surface-variant .material-symbols-outlined {
+    margin-right: auto;
+    margin-left: 0.5rem;
+}
+
+[dir="ltr"] .flex.items-center.text-on-surface-variant .material-symbols-outlined {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+}
+
+/* Smooth language transition animation */
+body {
+    transition: direction 0.3s ease;
+}
+
+/* Active language indicator */
+.lang-toggle.active {
+    color: #1db954;
+    text-shadow: 0 0 10px rgba(29, 185, 84, 0.4);
+}

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<!-- 
+    ========================================
+    صفحة تصفح الملاعب حسب الموقع
+    ========================================
+    لماذا هذه الصفحة موجودة:
+    - عرض قائمة محافظات مصر للمستخدم
+    - عرض المناطق والمدن داخل المحافظة المختارة
+    - عرض الملاعب المتاحة في المنطقة المختارة
+    - السماح بالتنقل والفلترة والبحث
+    
+    هيكل الصفحة:
+    1. رأس الصفحة (Head): محتويات إعدادات الصفحة
+    2. شريط التنقل (NavBar): قائمة التنقل العلوية
+    3. المحتوى الرئيسي (Main): أقسام تصفح الملاعب
+    4. الملاحة الهرمية (Hierarchy): محافظات > مناطق > ملاعب
+-->
+<head>
+    <!-- ========================================
+         معلومات المتصفح والترميز
+         ======================================== -->
+    
+    <!-- تحديد أن الملف بصيغة UTF-8 (دعم اللغة العربية) -->
+    <meta charset="utf-8"/>
+    
+    <!-- إعدادات الشاشات الصغيرة والهواتف -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    
+    <!-- عنوان الصفحة (يظهر في تبويب المتصفح) -->
+    <title>Browse by Location | KICKZONE</title>
+    
+    <!-- ========================================
+         الملفات الخارجية والمكتبات
+         ======================================== -->
+    
+    <!-- نظام الترجمة والدعم متعدد اللغات -->
+    <script src="js/translation.js"></script>
+    
+    <!-- مكتبة Tailwind CSS للأنماط (من CDN) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- الخط المستخدم في الموقع (Lexend) -->
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet"/>
+    
+    <!-- مكتبة أيقونات Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- استيراد نفس مكتبة الأيقونات مرة أخرى (قد تكون تكرار) -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- أنماط دعم RTL والترجمة -->
+    <link href="css/translation.css" rel="stylesheet"/>
+    
+    <!-- ========================================
+         إعدادات Tailwind CSS
+         ======================================== -->
+    <!-- (هذا الجزء يعرّف الألوان والخصائص المخصصة للموقع) -->
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffdad9",
+                    "outline-variant": "rgba(255, 255, 255, 0.05)",
+                    "on-secondary-fixed-variant": "#195127",
+                    "surface": "#0a120d",
+                    "inverse-on-surface": "#0a120d",
+                    "surface-variant": "rgba(255, 255, 255, 0.03)",
+                    "primary-fixed": "#1db954",
+                    "tertiary-fixed-dim": "#ffb3b3",
+                    "on-background": "#f1f5f9",
+                    "on-error": "#690005",
+                    "error": "#ffb4ab",
+                    "surface-bright": "#222a24",
+                    "tertiary": "#ffb3b3",
+                    "primary": "#1db954",
+                    "secondary": "#99d59d",
+                    "on-error-container": "#ffdad6",
+                    "surface-dim": "#0a120d",
+                    "surface-container-highest": "rgba(255, 255, 255, 0.12)",
+                    "on-primary": "#0a120d",
+                    "on-surface": "#f1f5f9",
+                    "background": "#0a120d",
+                    "surface-container-high": "rgba(255, 255, 255, 0.08)",
+                    "secondary-fixed": "#b5f1b8",
+                    "on-surface-variant": "#94a3b8",
+                    "outline": "rgba(255, 255, 255, 0.1)",
+                    "inverse-surface": "#f1f5f9",
+                    "on-secondary-container": "#8cc690",
+                    "secondary-fixed-dim": "#99d59d",
+                    "on-tertiary-container": "#730a1b",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed": "#002108",
+                    "on-secondary": "#003914",
+                    "surface-container-lowest": "#050a07",
+                    "surface-tint": "#1db954",
+                    "on-tertiary-fixed-variant": "#881d28",
+                    "on-tertiary-fixed": "#400009",
+                    "surface-container": "rgba(255, 255, 255, 0.05)",
+                    "on-tertiary": "#680114",
+                    "on-primary-fixed": "#0a120d",
+                    "secondary-container": "#1c5329",
+                    "primary-fixed-dim": "#137c38",
+                    "primary-container": "#1db954",
+                    "tertiary-container": "#ff767b",
+                    "inverse-primary": "#137c38",
+                    "on-primary-fixed-variant": "#005320",
+                    "surface-container-low": "rgba(255, 255, 255, 0.03)",
+                    "on-primary-container": "#0a120d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Lexend"],
+                    "body": ["Lexend"],
+                    "label": ["Lexend"]
+            }
+          },
+        },
+      }
+    </script>
+    
+    <!-- ========================================
+         أنماط مخصصة (Custom Styles)
+         ======================================== -->
+    <style>
+        /* تطبيق الخط والألوان الأساسية على الصفحة */
+        body { font-family: 'Lexend', sans-serif; background-color: #0a120d; color: #f1f5f9; }
+        
+        /* تأثير البطاقة الزجاجية (Glass Morphism) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03); /* خلفية شفافة */
+            backdrop-filter: blur(12px); /* تأثير الضباب */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* حد رقيق */
+        }
+        
+        /* إعدادات أيقونات Material Symbols */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background selection:bg-primary selection:text-on-primary">
+    <!-- 
+        ========================================
+        شريط التنقل العلوي (Top Navigation Bar)
+        ========================================
+        لماذا موجود:
+        - توفير وصول سريع للقوائم الرئيسية
+        - عرض الشعار الخاص بالموقع
+        - السماح بتبديل اللغة
+        - عرض البحث والإشعارات
+    -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a120d]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_0_15px_rgba(29,185,84,0.1)]">
+        <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+            <!-- الجزء الأيسر: الشعار والقوائم -->
+            <div class="flex items-center gap-8">
+                <!-- شعار الموقع -->
+                <a class="text-2xl font-black text-[#1db954] drop-shadow-[0_0_10px_rgba(29,185,84,0.4)] font-['Lexend'] uppercase tracking-wider" href="#">KICKZONE</a>
+                
+                <!-- القوائم (مخفية في الشاشات الصغيرة) -->
+                <div class="hidden md:flex gap-6">
+                    <!-- رابط الدوريات -->
+                    <a class="text-white/70 hover:text-white transition-colors font-['Lexend'] uppercase tracking-wider text-sm" href="#" data-i18n="nav.leagues">Leagues</a>
+                    
+                    <!-- رابط الملاعب (نشط حالياً) -->
+                    <a class="text-[#1db954] font-bold border-b-2 border-[#1db954] pb-1 font-['Lexend'] uppercase tracking-wider text-sm" href="#" data-i18n="nav.pitches">Pitches</a>
+                    
+                    <!-- رابط حجوزاتي -->
+                    <a class="text-white/70 hover:text-white transition-colors font-['Lexend'] uppercase tracking-wider text-sm" href="#" data-i18n="nav.myBookings">My Bookings</a>
+                    
+                    <!-- رابط التدريب -->
+                    <a class="text-white/70 hover:text-white transition-colors font-['Lexend'] uppercase tracking-wider text-sm" href="#" data-i18n="nav.training">Training</a>
+                </div>
+            </div>
+            
+            <!-- الجزء الأيمن: البحث والأيقونات والتبديل اللغوي -->
+            <div class="flex items-center gap-4">
+                <!-- زر تبديل اللغة -->
+                <div class="lang-toggle" onclick="toggleLanguage()" style="cursor: pointer; padding: 0.5rem; display: flex; align-items: center; gap: 0.25rem; color: rgba(255,255,255,0.7)">
+                    <!-- عرض اللغة الحالية (EN أو AR) -->
+                    <span id="current-lang" style="font-weight: bold; font-size: 12px;">EN</span>
+                    <!-- أيقونة اللغة -->
+                    <span class="material-symbols-outlined">language</span>
+                </div>
+                
+                <!-- حقل البحث (مخفي في الشاشات الصغيرة) -->
+                <div class="relative hidden sm:block">
+                    <!-- أيقونة البحث -->
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/40">search</span>
+                    
+                    <!-- حقل الإدخال -->
+                    <input class="bg-white/5 border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary w-64 text-white placeholder-white/30" type="text" data-i18n="browse.searchPitches"/>
+                </div>
+                
+                <!-- زر الإشعارات -->
+                <button class="p-2 text-white/70 hover:text-[#1db954] transition-colors">
+                    <span class="material-symbols-outlined" data-i18n="nav.notifications">notifications</span>
+                </button>
+                
+                <!-- 
+                    زر الحساب الشخصي
+                    account_circle: ايقونة دائرية تمثل الحساب بشكل أوضح من "person"
+                    هذه الايقونة أفضل لإظهار أنها خاصة بالحساب الشخصي
+                -->
+                <button class="p-2 text-white/70 hover:text-[#1db954] transition-colors" title="Account">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 
+        ========================================
+        المحتوى الرئيسي (Main Content)
+        ========================================
+        لماذا موجود:
+        - عرض التسلسل الهرمي: محافظات > مناطق > ملاعب
+        - السماح بالتفاعل والاختيار
+        - عرض النتائج ديناميكياً
+    -->
+            <!-- شبكة عرض المحافظات 
+                لماذا هذه الشبكة:
+                - تعرض المحافظات بترتيب منظم
+                - grid: نظام شبكي للعناصر
+                - grid-cols-2: عمودين في الشاشات الصغيرة
+                - md:grid-cols-3: 3 أعمدة في الشاشات المتوسطة
+                - lg:grid-cols-4: 4 أعمدة في الشاشات الكبيرة
+                - gap-4: مسافة 1rem بين العناصر
+            -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- 
+                    ============================================
+                    بطاقة محافظة (Governorate Card)
+                    ============================================
+                    هذه البطاقة تمثل محافظة واحدة
+                    لماذا موجودة:
+                    - عرض صورة المحافظة
+                    - عرض اسم المحافظة
+                    - القدرة على الضغط لاختيار المحافظة
+                    - عرض حالة الاختيار (مختارة أم لا)
+                    
+                    الفئات المستخدمة:
+                    - group: مجموعة عناصر مرتبطة (عند hover على المجموعة، تؤثر على العناصر داخلها)
+                    - relative: موضع نسبي (للعناصر المطلقة بداخله)
+                    - overflow-hidden: إخفاء أي عنصر يخرج عن الحدود
+                    - rounded-xl: زوايا مستديرة كبيرة جداً
+                    - aspect-[4/3]: نسبة المحتوى 4:3 (عرض:ارتفاع)
+                    - cursor-pointer: تغيير شكل الماوس ليدل على قابلية الضغط
+                    - border-2: حد بسمك 2px
+                    - border-primary: لون الحد أخضر (البطاقة المختارة)
+                    - shadow: ظل أخضري يشع
+                -->
+                <div class="group relative overflow-hidden rounded-xl aspect-[4/3] cursor-pointer border-2 border-primary shadow-[0_0_20px_rgba(29,185,84,0.1)]">
+                    <!-- 
+                        الصورة الخلفية للمحافظة
+                        لماذا موجودة:
+                        - تعطي المستخدم فكرة عن المحافظة
+                        - تزيد الجاذبية البصرية للبطاقة
+                        
+                        الفئات:
+                        - absolute: موضع مطلق (بداخل relative الأب)
+                        - inset-0: يملأ كل المساحة (top:0, right:0, bottom:0, left:0)
+                        - bg-cover: تغطي الصورة كل المساحة
+                        - bg-center: الصورة متمركزة في المركز
+                        - transition-transform: انتقال سلس لتحويل الحجم
+                        - duration-700: مدة التأثير 700 ميلي ثانية
+                        - group-hover:scale-110: عند تمرير الماوس على المجموعة، الصورة تكبر 10%
+                    -->
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
+                         data-alt="لقطة سينمائية واسعة لخط القاهرة ليلاً مع أضواء المدينة المنعكسة على نهر النيل" 
+                         style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAOzpzFNH86_fzde30eK73oHMSl2BEgJPDGFFSJhCbmNW4a0zlkTaVwQ1cyGzOdUsIbh36r6QiLSAxGYnyQ9cC1Cf8II_s7nV3sd6SxyRp4puk327MmY2BbYSXODYVfj_MIUhy-yKvbbNJYiF2yXxDkOJyPAj1q5O2J2zyZjZ7srpSB-L1sEl_5FqqSJQrmUOkI1d3h7oIlzGkv_4PmuxxL_SXPRGu_hQ99xSTLuy08f9p7gB_ROGqgO1vcVWGhapayWNSBVdw3_pGc')">
+                    </div>
+                    
+                    <!-- 
+                        التدرج اللوني فوق الصورة
+                        لماذا موجود:
+                        - تعتيم الصورة لجعل النص أسهل للقراءة
+                        - إنشاء تأثير بصري احترافي
+                        - bg-gradient-to-t: تدرج من الأسفل للأعلى
+                        - from-background: اللون الداكن في الأسفل (معتم جداً)
+                        - via-background/20: لون وسطي بشفافية 20%
+                        - to-transparent: شفاف تام في الأعلى
+                    -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+                    
+                    <!-- 
+                        النص في الأسفل (اسم المحافظة)
+                        لماذا موجود:
+                        - عرض اسم المحافظة
+                        - absolute: موضع مطلق يسمح بالتموضع الدقيق
+                        - flex flex-col: عناصر الفرينة بشكل عمودي
+                        - justify-end: محاذاة للأسفل
+                        - p-5: حشو 1.25rem من جميع الجوانب
+                    -->
+                    <div class="absolute inset-0 flex flex-col justify-end p-5">
+                        <!-- 
+                            تسمية "اختيار نشط" 
+                            لماذا موجودة:
+                            - تظهر فقط للمحافظة المختارة
+                            - تخبر المستخدم أن هذه المحافظة مختارة حالياً
+                        -->
+                        <span class="text-xs font-bold text-primary tracking-widest uppercase mb-1" data-i18n="browse.activeSelection">Active Selection</span>
+                        
+                        <!-- اسم المحافظة -->
+                        <h3 class="text-2xl font-black text-white" data-i18n="browse.cairo">Cairo</h3>
+                    </div>
+                    
+                    <!-- 
+                        أيقونة التحقق
+                        لماذا موجودة:
+                        - تظهر فقط للمحافظة المختارة
+                        - تؤكد للمستخدم أن المحافظة مختارة
+                        - absolute top-4 right-4: موضع في الزاوية العلوية اليمنى
+                        - bg-primary: لون أخضر
+                        - text-on-primary: لون النص على الخلفية الخضراء
+                        - rounded-full: دائري تماماً
+                        - p-1: حشو صغير
+                        - shadow-lg: ظل كبير معآظهار واضح
+                    -->
+                    <div class="absolute top-4 right-4 bg-primary text-on-primary rounded-full p-1 shadow-lg">
+                        <span class="material-symbols-outlined text-sm font-bold">check</span>
+                    </div>
+                </div>
+                
+                <!-- 
+                    بطاقة محافظة الإسكندرية
+                    لماذا موجودة:
+                    - عرض محافظة إضافية
+                    - glass-card: بطاقة زجاجية (شفافة مع ضباب خلفي)
+                    - hover:border-primary/50: عند التمرير، الحد يصبح أخضر بشفافية 50%
+                    - transition-all: انتقال سلس لجميع التغييرات
+                -->
+                <div class="group relative overflow-hidden rounded-xl aspect-[4/3] cursor-pointer glass-card hover:border-primary/50 transition-all">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="منظر درامي لكورنيش الإسكندرية عند الغسق مع موجات البحر الأبيض المتوسط والهندسة المعمارية المتوسطية" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZk-IJVyfsMdwW7wzM8jRsgzfiCRGQbOs7BhamSOpnD7ZKbZv7wtjlb_qe8pVJT6O51mkkqrFYSs7E28jg8gMX5lya8hxOBHMRNCWVqkHDzufndaFzHqXTBA_N428PdhFNTWIIwX1KCAIyAM1ze98g5z4JGSJthUymx8MBlFFWahgrQAESv9Qc9nX77FulSh8QBufBeC3zg9cjDH2T1MAhGd_vosdjqsi7Vi6G29-y7sse3X7AJsHgeUwrdYhSwQZhvmZ5gZG6qLZy')"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+            <div class="absolute inset-0 flex flex-col justify-end p-5">
+                <h3 class="text-2xl font-black text-white group-hover:text-primary transition-colors" data-i18n="browse.alexandria">Alexandria</h3>
+            </div>
+        </div>
+        <!-- Giza Card -->
+        <div class="group relative overflow-hidden rounded-xl aspect-[4/3] cursor-pointer glass-card hover:border-primary/50 transition-all">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="الأهرامات العظيمة للجيزة تحت سماء مرصعة بالنجوم مع إضاءة ذهبية من المدينة" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmff8rbzylrKLfWWYUWdBXHix882BMdBZGMjIzNsBIG9DGhMsXtto9M4YT6u1bgrX8_iXbWsORnw2fwf9NnhClb7vzQLuFS_nEv-22BMHUcnEXvS7iaNWMl0WCVYM_ZwlWTRlpCcgs4EGp3sXcN6GGLInQWh60D47_hP4vi3p5cjv2ovBSxOkmvTQoFqp5RU6LKK4tcNv6Jdc_QfMzyaLY79nTHwOSUUSXJGXAuVjSD3LKpQwhSmsUtHokSzxESe5sZotlLTPcmUys')"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+            <div class="absolute inset-0 flex flex-col justify-end p-5">
+                <h3 class="text-2xl font-black text-white group-hover:text-primary transition-colors" data-i18n="browse.giza">Giza</h3>
+            </div>
+        </div>
+        <!-- Red Sea Card -->
+        <div class="group relative overflow-hidden rounded-xl aspect-[4/3] cursor-pointer glass-card hover:border-primary/50 transition-all">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="منظر جوي لمنتجع البحر الأحمر مع ماء فيروزي وتطويرات ساحلية فاخرة" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6ImEYHbsExxgDuy3R9IWeG02WckNN0N60cJlm2hqfXoWuRbc_bH-6DA-57uowPjegSUahD5yoCh4Jfa7IPjG9XXYxQuppFgsLl16dX97kvNC0lOG0KUdkoQ7KnlAGIR1yfRSnzvQVNBFarUGrQhDoCX5w51i39x1KYmDv-vBoT-B3JmeG2Nb8KQRKXgTS9E9bkxMomnDNO740Y8FfLpdChY1Vkn5BSnbNrr98FyoyWCeDsdHRDn1JQVfJ4o6dKDuhBvJNg34acYLh')"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+            <div class="absolute inset-0 flex flex-col justify-end p-5">
+                <h3 class="text-2xl font-black text-white group-hover:text-primary transition-colors" data-i18n="browse.redSea">Red Sea</h3>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hierarchy Navigation: Districts -->
+<section class="mb-16">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-2">
+            <span class="text-primary font-bold text-sm tracking-widest uppercase" data-i18n="browse.step2">Step 2</span>
+            <h2 class="text-xl font-bold text-white" data-i18n="browse.districtsIn">Districts in Cairo</h2>
+        </div>
+        <div class="flex items-center gap-2 text-on-surface-variant text-sm">
+            <span class="material-symbols-outlined text-sm">filter_list</span>
+            <span data-i18n="browse.sortByPopularity">Sort by popularity</span>
+        </div>
+    </div>
+            
+            <!-- 
+                أزرار المناطق/المدن
+                لماذا هذه الأزرار موجودة:
+                - تسمح بالاختيار السريع للمناطق
+                - كل زر = منطقة/مدينة واحدة
+                - الزر النشط له لون أخضر
+                - الأزرار الأخرى شفافة وترتفع عند الضغط
+                
+                flex: عرض أفقي
+                flex-wrap: التفاف للسطر التالي إذا لم تكن هناك مساحة
+                gap-3: مسافة 0.75rem بين الأزرار
+            -->
+            <div class="flex flex-wrap gap-3">
+                <!-- 
+                    الزر النشط (مدينة نصر)
+                    لماذا موجود:
+                    - يظهر دائماً أول زر مختار عند فتح الصفحة
+                    - bg-primary: لون خلفية أخضر
+                    - text-on-primary: لون النص على الخلفية الخضراء (داكن)
+                    - font-bold: نص غامق مثل
+                    - text-sm: نص صغير
+                    - shadow: ظل مع توهج أخضر
+                    - transition-transform: انتقال سلس للتحويل
+                    - active:scale-95: عند الضغط، الزر ينكمش قليلاً (تأثير البيانو)
+                -->
+                <button class="px-6 py-2 rounded-full bg-primary text-on-primary font-bold text-sm shadow-[0_0_15px_rgba(29,185,84,0.3)] transition-transform active:scale-95" data-i18n="browse.nasrCity">Nasr City</button>
+                
+                <!-- 
+                    الأزرار غير النشطة
+                    لماذا موجودة:
+                    - تظهر المناطق الأخرى المتاحة
+                    - glass-card: بطاقات زجاجية شفافة
+                    - hover:bg-white/10: عند التمرير، خلفية بيضاء شفافة
+                    - text-white: نص أبيض
+                    - font-medium: وزن نص متوسط
+                    - active:scale-95: تأثير البيانو عند الضغط
+                -->
+                <button class="px-6 py-2 rounded-full glass-card hover:bg-white/10 text-white font-medium text-sm transition-all active:scale-95" data-i18n="browse.maadi">Maadi</button>
+                <button class="px-6 py-2 rounded-full glass-card hover:bg-white/10 text-white font-medium text-sm transition-all active:scale-95" data-i18n="browse.sheikhZayed">Sheikh Zayed</button>
+                <button class="px-6 py-2 rounded-full glass-card hover:bg-white/10 text-white font-medium text-sm transition-all active:scale-95" data-i18n="browse.sixthOctober">6th of October</button>
+                <button class="px-6 py-2 rounded-full glass-card hover:bg-white/10 text-white font-medium text-sm transition-all active:scale-95" data-i18n="browse.newCairo">New Cairo</button>
+                <button class="px-6 py-2 rounded-full glass-card hover:bg-white/10 text-white font-medium text-sm transition-all active:scale-95" data-i18n="browse.heliopolis">Heliopolis</button>
+                <button class="px-6 py-2 rounded-full glass-card hover:bg-white/10 text-white font-medium text-sm transition-all active:scale-95" data-i18n="browse.zamalek">Zamalek</button>
+</section>
+<!-- 
+    ================================================
+    قسم النتائج: عرض الملاعب المتاحة
+    ================================================
+    لماذا موجود:
+    - عرض جميع الملاعب المتاحة في المنطقة المختارة
+    - السماح للمستخدم بالاختيار والحجز
+    - عرض معلومات الملعب بشكل منظم في شبكة
+    
+    الفئات المستخدمة:
+    - grid grid-cols-1: عمود واحد على الموبايل
+    - md:grid-cols-2: عمودين على الشاشات المتوسطة
+    - lg:grid-cols-3: 3 أعمدة على الشاشات الكبيرة
+    - gap-8: مسافة كبيرة 2rem بين البطاقات
+-->
+<section>
+    <!-- 
+        رأس القسم: العنوان والعدد
+        flex items-center justify-between: توزيع العناصر بين الطرفين
+        mb-8: هامش سفلي 2rem (مسافة من الشبكة)
+    -->
+    <div class="flex items-center justify-between mb-8">
+        <!-- 
+            العنوان الرئيسي
+            text-2xl: حجم نص كبير جداً
+            font-black: وزن نص أقصى (الأسود)
+            text-white: نص أبيض
+            uppercase: أحرف كبيرة
+            tracking-tight: مسافات ضيقة بين الأحرف
+            span.text-primary: عدد الملاعب بلون أخضر
+            ml-2: مسافة يسار 0.5rem
+        -->
+        <h2 class="text-2xl font-black text-white uppercase tracking-tight" data-i18n="browse.availablePitchesIn">Available Pitches in Nasr City <span class="text-primary ml-2">(12)</span></h2>
+    </div>
+    <!-- 
+        شبكة الملاعب: حاوية BEM layout system
+        grid: نظام شبكي
+        grid-cols-1: عمود واحد على الموبايل
+        md:grid-cols-2: عمودين على الشاشات المتوسطة (768px+)
+        lg:grid-cols-3: 3 أعمدة على الشاشات الكبيرة (1024px+)
+        gap-8: مسافة 2rem بين البطاقات
+        
+        لماذا هذه النسبة:
+        - الموبايل: تركيز على بطاقة واحدة كاملة
+        - الجهاز اللوحي: عرضان للمقارنة السريعة
+        - سطح المكتب: 3 أعمدة لاستخدام المساحة الكاملة وعرض أكثر
+    -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 
+            ============================================
+            بطاقة ملعب (Pitch Card)
+            ============================================
+            هذه البطاقة تمثل ملعب واحد
+            
+            لماذا موجودة:
+            - عرض معلومات الملعب بشكل جذاب
+            - صورة الملعب تعطي انطباع أول جيد
+            - السعر والتقييم يساعد المستخدم على الاختيار السريع
+            - أزرار الحجز والإعجاب توفر تفاعل مباشر
+            
+            الفئات المستخدمة:
+            - glass-card: بطاقة زجاجية شفافة مع ضباب خلفي
+            - rounded-xl: زوايا مستديرة كبيرة جداً
+            - overflow-hidden: حدود الصورة مستديرة (لا تخرج من البطاقة)
+            - group: مجموعة عناصر مرتبطة بتأثير واحد
+            - hover:-translate-y-2: ترفع البطاقة 0.5rem عند التمرير
+            - transition-all: انتقال سلس لجميع الخصائص
+            - duration-300: مدة الانتقال 300 ميلي ثانية
+        -->
+        <div class="glass-card rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+            <div class="relative aspect-video">
+                <!-- 
+                    صورة الملعب
+                    w-full h-full: تملأ كل المساحة
+                    object-cover: تغطي الصورة كل المساحة مع الحفاظ على النسبة
+                    data-alt: نص بديل (accessibility) إذا فشلت الصورة
+                -->
+                <img class="w-full h-full object-cover" data-alt="High-angle shot of a vibrant green artificial football turf at night under bright stadium floodlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm5hn9_9mEHyL476-W148veEtvyF-1wUQWmGA8fm0wVfbR5KTYkX4gX06RlwQc1ks9wsonpMUMqoxs5PIe_tia6dZUcdonH5oaMe_ziCymO2Kd7sHhvuQcQZ1Pk6qwRKfQlWUjv-IFxqqWG5va2MSCJfNMwOLPDv3bm_ggMHNbmDF9hJKmmvvSsTVOhQwHqAtHZ0zap-6R4Wvty7EflA95snl8B81h2TMtY40QXey4HRA-h6a7ET6n1x30lqPQraKjvmdQ87gdCnwC"/>
+                
+                <!-- 
+                    تسمية نوع الملعب (احترافي/شائع/جديد)
+                    موضع: في الزاوية العلوية اليسرى
+                    
+                    absolute: موضع مطلق (بداخل relative الأب)
+                    top-4 left-4: على بعد 1rem من الأعلى واليسار
+                    
+                    bg-primary/20: خلفية أخضر بشفافية 20%
+                    backdrop-blur-md: ضباب خلفي متوسط الكثافة
+                    text-primary: نص أخضر
+                    px-3 py-1: حشو أفقي وعمودي صغير
+                    rounded: زوايا مستديرة بسيطة
+                    text-[10px]: نص صغير جداً
+                    font-black: وزن نص أغمق
+                    uppercase: أحرف كبيرة
+                    tracking-widest: تباعد حروف كبير جداً
+                    border border-primary/30: حد أخضر بشفافية 30%
+                -->
+                <div class="absolute top-4 left-4">
+                    <span class="bg-primary/20 backdrop-blur-md text-primary px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest border border-primary/30" data-i18n="browse.proGrade">Pro Grade</span>
+                </div>
+                
+                <!-- 
+                    عرض السعر والساعة
+                    موضع: في الزاوية السفلى اليمنى
+                    
+                    absolute: موضع مطلق
+                    bottom-4 right-4: على بعد 1rem من الأسفل واليمين
+                    
+                    bg-background/80: خلفية داكنة شفافة 80%
+                    backdrop-blur-md: ضباب خلفي
+                    px-3 py-1: حشو صغير
+                    rounded-lg: زوايا مستديرة متوسطة
+                    
+                    السعر: text-primary font-bold = أخضر وغامق
+                    الساعة: text-xs text-white/60 ml-1 = نص صغير، رمادي، مسافة يسار
+                -->
+                <div class="absolute bottom-4 right-4 bg-background/80 backdrop-blur-md px-3 py-1 rounded-lg">
+                    <span class="text-primary font-bold">EGP 450</span>
+                    <span class="text-xs text-white/60 ml-1">/hr</span>
+                </div>
+            </div>
+            <!-- 
+                محتوى البطاقة: النصوص والأزرار
+                p-6: حشو 1.5rem من جميع الجوانب (مسافة داخلية)
+            -->
+            <div class="p-6">
+                <!-- 
+                    السطر الأول: اسم الملعب + التقييم
+                    flex: عرض أفقي
+                    justify-between: توزيع العناصر بين الطرفين (يسار ويمين)
+                    items-start: محاذاة أعلى الطرف
+                    mb-2: مسافة هامش سفلي صغيرة (0.5rem)
+                -->
+                <div class="flex justify-between items-start mb-2">
+                    <!-- 
+                        اسم الملعب
+                        text-xl: حجم نص كبير
+                        font-bold: وزن نص غامق
+                        text-white: نص أبيض
+                        group-hover:text-primary: عند الضم الماوس على المجموعة، يتحول النص لأخضر
+                        transition-colors: انتقال سلس للونين
+                    -->
+                    <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors" data-i18n="browse.stadium5Arena">Stadium 5 Arena</h3>
+                    
+                    <!-- 
+                        التقييم مع النجمة
+                        flex: عرض أفقي
+                        items-center: محاذاة المركز
+                        text-primary: لون أخضر
+                        
+                        style="font-variation-settings: 'FILL' 1"
+                        - FILL: 0 = نجمة مفرغة (فقط الخطوط)
+                        - FILL: 1 = نجمة ممتلئة (معبأة بالألوان)
+                    -->
+                    <div class="flex items-center text-primary">
+                        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">star</span>
+                        <span class="text-sm font-bold ml-1">4.9</span>
+                    </div>
+                </div>
+                
+                <!-- 
+                    الموقع الجغرافي
+                    flex: عرض أفقي
+                    items-center: محاذاة المركز
+                    text-on-surface-variant: لون رمادي فاتح
+                    text-sm: نص صغير
+                    mb-6: مسافة هامش سفلي كبيرة (1.5rem)
+                -->
+                <div class="flex items-center text-on-surface-variant text-sm mb-6">
+                    <!-- أيقونة الموقع (pinpoint) -->
+                    <span class="material-symbols-outlined text-base mr-1">location_on</span>
+                    Nasr City, Cairo
+                </div>
+                
+                <!-- 
+                    مجموعة الأزرار: الحجز والإعجاب
+                    flex: عرض أفقي
+                    items-center: محاذاة المركز
+                    gap-3: مسافة 0.75rem بين الزرين
+                -->
+                <div class="flex items-center gap-3">
+                    <!-- 
+                        زر عرض التفاصيل والحجز
+                        flex-1: يمتد لملء المساحة المتبقية (ينمو أفقياً)
+                        bg-primary: خلفية خضراء
+                        text-on-primary: نص على الخلفية الخضراء
+                        font-bold: نص غامق
+                        py-3: حشو عمودي (1rem من أعلى وأسفل)
+                        rounded-xl: زوايا مستديرة كبيرة
+                        transition-all: انتقال سلس لجميع الخصائص
+                        active:scale-95: عند الضغط (active)، الزر ينكمش 5% (تأثير البيانو)
+                        shadow: ظل مع توهج أخضر خفيف
+                    -->
+                    <button class="flex-1 bg-primary text-on-primary font-bold py-3 rounded-xl transition-all active:scale-95 shadow-[0_0_15px_rgba(29,185,84,0.2)]" data-i18n="browse.viewDetails">View Details</button>
+                    
+                    <!-- 
+                        زر الإعجاب (قلب)
+                        w-12 h-12: طول وعرض ثابت 3rem (12 × 4px)
+                        flex: عرض أفقي لتوسيط محتويات
+                        items-center: محاذاة المركز عمودياً
+                        justify-center: محاذاة المركز أفقياً
+                        glass-card: بطاقة زجاجية شفافة
+                        rounded-xl: زوايا مستديرة كبيرة
+                        hover:text-primary: عند الضم الماوس، النص يصبح أخضر
+                        transition-colors: انتقال سلس للألوان
+                    -->
+                    <button class="w-12 h-12 flex items-center justify-center glass-card rounded-xl hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 
+            ================================================
+            البطاقة الثانية: ملعب مشهور (Elite Turf Club)
+            ================================================
+            class="glass-card rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300"
+            - glass-card: تأثير زجاج شفاف
+            - overflow-hidden: إخفاء المحتوى البارز خارج حدود البطاقة
+            - group: تجميع العناصر للتأثيرات المشتركة
+            - hover:-translate-y-2: عند الضم الماوس، البطاقة ترتفع (تأثير shadow float)
+            - transition-all: انتقال سلس لجميع التغييرات
+        -->
+        <div class="glass-card rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+            <!-- حاوية الصورة مع الشارات -->
+            <div class="relative aspect-video">
+                <!-- 
+                    صورة الملعب
+                    object-cover: قص الصورة لتملأ الحاوية دون تشويه النسبة
+                    لماذا: يضمن أن الصور ذات جودة عالية وموحدة المظهر
+                -->
+                <img class="w-full h-full object-cover" data-alt="Wide shot of a soccer field during golden hour with long shadows and warm lighting on the green turf" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP7eBfA6kIC7-BO-I21EB6sQcgMlFwoRwAVLCYxNx-viy8R8sC5Pqm-t62GxafewSi_jMz1NEJNVOyeda-402nFURtto5BnC0HWhkiLjCVlX1ltAbfOS9rBOUWxvWfiP0qGT65U4CaaBKUGEH2k1xrBTW4pfiQjAqQ0M0RLwlBvXIAGWnv0ieF6eiKt31DqiQAeXZjUdaUTvu6RW49O55dS55JW27prTTMi7xvH3si9BrjMixXFyWSoISXLgxkJk1PXUlK997TLcLW"/>
+                
+                <!-- 
+                    شارة "مشهور" في الزاوية العلوية اليسرى
+                    absolute top-4 left-4: موضع ثابت (أعلى يسار)
+                    bg-primary/20: خلفية خضراء شفافة 20%
+                    backdrop-blur-md: تمويه الخلفية خلف الشارة
+                    border border-primary/30: حدود خضراء شفافة 30%
+                    لماذا: يميز الملاعب الشهيرة بشارة مرئية واضحة دون إخفاء الصورة
+                -->
+                <div class="absolute top-4 left-4">
+                    <span class="bg-primary/20 backdrop-blur-md text-primary px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest border border-primary/30" data-i18n="browse.popular">Popular</span>
+                </div>
+                
+                <!-- سعر الساعة مع تأثير زجاجي -->
+                <div class="absolute bottom-4 right-4 bg-background/80 backdrop-blur-md px-3 py-1 rounded-lg">
+                    <span class="text-primary font-bold">EGP 380</span><span class="text-xs text-white/60 ml-1">/hr</span>
+                </div>
+            </div>
+            
+            <!-- محتوى البطاقة: النصوص والمعلومات والأزرار -->
+            <div class="p-6">
+                <!-- السطر الأول: الاسم + التقييم (نفس البطاقة الأولى تماماً) -->
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors" data-i18n="browse.eliteTurfClub">Elite Turf Club</h3>
+                    <div class="flex items-center text-primary">
+                        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">star</span>
+                        <span class="text-sm font-bold ml-1">4.7</span>
+                    </div>
+                </div>
+                <!-- الموقع -->
+                <div class="flex items-center text-on-surface-variant text-sm mb-6">
+                    <span class="material-symbols-outlined text-base mr-1">location_on</span>
+                            Nasr City, Cairo
+                        </div>
+                <!-- الأزرار: الحجز والإعجاب -->
+                <div class="flex items-center gap-3">
+                    <button class="flex-1 bg-primary text-on-primary font-bold py-3 rounded-xl transition-all active:scale-95 shadow-[0_0_15px_rgba(29,185,84,0.2)]" data-i18n="browse.viewDetails">View Details</button>
+                    <button class="w-12 h-12 flex items-center justify-center glass-card rounded-xl hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 
+            ================================================
+            البطاقة الثالثة: ملعب جديد (Goal Point Arena)
+            ================================================
+            هذه البطاقة لا تحتوي على شارة "Popular" أو "Pro Grade"
+            وهذا يعني أنها ملاعب عادية أو جديدة للقائمة
+            البقية نفس البطاقات السابقة (نفس التخطيط، بيانات مختلفة فقط)
+        -->
+        <div class="glass-card rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300">
+            <!-- حاوية الصورة -->
+            <div class="relative aspect-video">
+                <!-- 
+                    صورة الملعب الثالث
+                    لماذا object-cover: توحيد المظهر بين جميع الملاعب
+                -->
+                <img class="w-full h-full object-cover" data-alt="Atmospheric night shot of a local football pitch with dramatic stadium lighting and high contrast shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_Xz6wuH_k6MVacY0NpGqWJFapsTiFyypG7AolmlDg2uKJIGR5L3aITOcgr0zLdF3eng6kyl0kJ9Z6hG-L_kZcKPw53zSLfQpLuhzMd3AD2Fw9XthAuZvOnaE8fox7tBO1lDhJcodZA5XFBhYqMulNyALvG4KSSTpwXUzdR5XhWkS88Npg7EfuM-CAmcMsVSqrNFddNdgLj3d8pFrklp8F8Eh3h-rWnCKSHATh3AkjlyjNshVvkz-GqdP6m_5Str_j-LTHCuT9xurl"/>
+                
+                <!-- 
+                    سعر الساعة (بدون شارة)
+                    لماذا بدون شارة: قد تكون ملاعب جديدة أو عادية لم تصل للشهرة بعد
+                -->
+                <div class="absolute bottom-4 right-4 bg-background/80 backdrop-blur-md px-3 py-1 rounded-lg">
+                    <span class="text-primary font-bold">EGP 320</span><span class="text-xs text-white/60 ml-1">/hr</span>
+                </div>
+            </div>
+            
+            <!-- محتوى البطاقة: النصوص والأزرار -->
+            <div class="p-6">
+                <!-- السطر الأول: الاسم + التقييم -->
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors" data-i18n="browse.goalPointArena">Goal Point Arena</h3>
+                    <div class="flex items-center text-primary">
+                        <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">star</span>
+                        <span class="text-sm font-bold ml-1">4.5</span>
+                    </div>
+                </div>
+                <!-- الموقع -->
+                <div class="flex items-center text-on-surface-variant text-sm mb-6">
+                    <span class="material-symbols-outlined text-base mr-1">location_on</span>
+                            Nasr City, Cairo
+                        </div>
+                <!-- الأزرار: الحجز والإعجاب -->
+                <div class="flex items-center gap-3">
+                    <button class="flex-1 bg-primary text-on-primary font-bold py-3 rounded-xl transition-all active:scale-95 shadow-[0_0_15px_rgba(29,185,84,0.2)]" data-i18n="browse.viewDetails">View Details</button>
+                    <button class="w-12 h-12 flex items-center justify-center glass-card rounded-xl hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 
+        ================================================
+        قسم تحميل المزيد من الملاعب
+        ================================================
+        mt-12: هامش علوي كبير (3rem) لفصل عن البطاقات
+        text-center: محاذاة في المركز
+    -->
+    <div class="mt-12 text-center">
+        <!-- 
+            زر تحميل المزيد
+            px-8 py-3: حشو أفقي وعمودي
+            glass-card: تأثير زجاج شفاف (نفس البطاقات)
+            hover:bg-white/5: عند الضم الماوس، خلفية بيضاء شفافة قليلاً
+            transition-all: انتقال سلس
+            uppercase tracking-widest: نص بأحرف كبيرة مع مسافات بين الأحرف
+            text-sm: حجم نص صغير
+            لماذا: يتيح للمستخدم تحميل المزيد من الملاعب ديناميكياً عند الحاجة
+        -->
+        <button class="px-8 py-3 glass-card rounded-xl hover:bg-white/5 transition-all text-white font-bold uppercase tracking-widest text-sm" data-i18n="browse.loadMorePitches">Load More Pitches</button>
+    </div>
+</section>
+</main>
+<!-- 
+    ================================================
+    التذييل (Footer)
+    ================================================
+    bg-[#0a120d]: خلفية سوداء مظلمة جداً (لون ديفول مخصص)
+    border-t border-white/5: حد علوي أبيض شفاف جداً 5%
+    py-12 px-8: حشو عمودي وأفقي
+    لماذا: يفصل الفوتر بشكل واضح عن باقي الصفحة، وله مظهر احترافي
+-->
+<footer class="bg-[#0a120d] border-t border-white/5 py-12 px-8">
+    <!-- 
+        مستودع الفوتر: مرن للعرض
+        flex flex-col md:flex-row: عمودي على الموبايل، أفقي على الشاشات الكبيرة
+        justify-between: توزيع الأقسام في أطراف الشاشة
+        items-center: محاذاة المركز
+        gap-8: مسافة كبيرة بين الأقسام
+        max-w-screen-2xl: عرض أقصى
+        mx-auto: محاذاة في المركز
+    -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8 max-w-screen-2xl mx-auto">
+        <!-- 
+            القسم الأول: لوجو واسم الموقع
+            flex flex-col items-center md:items-start: أفقي بشكل أوسط، توسيط على الموبايل
+        -->
+        <div class="flex flex-col items-center md:items-start gap-4">
+            <!-- 
+                لوجو وعلامة "KICKZONE"
+                text-lg font-bold text-[#1db954]: أخضر فاتح (اللون الأساسي)
+                font-['Lexend']: خط مخصص
+                tracking-widest uppercase: أحرف كبيرة برسالة واسعة جداً
+            -->
+            <span class="text-lg font-bold text-[#1db954] font-['Lexend'] tracking-widest uppercase">KICKZONE</span>
+            <!-- 
+                نص حقوق الطبع النشر
+                text-white/40: أبيض شفاف 40%
+                text-xs: نص صغير جداً
+                tracking-tight: مسافات ضيقة جداً بين الأحرف
+                uppercase: أحرف كبيرة
+            -->
+            <p class="text-white/40 text-xs tracking-tight uppercase" data-i18n="footer.copyright">© 2024 KICKZONE. THE NEON PITCH.</p>
+        </div>
+        
+        <!-- 
+            القسم الثاني: روابط القوائم
+            flex flex-wrap justify-center: عرض أفقي مع التفاف على الخطوط الصغيرة
+            gap-8: مسافة كبيرة بين الروابط
+        -->
+        <div class="flex flex-wrap justify-center gap-8">
+            <!-- 
+                كل رابط في الفوتر
+                text-white/40: أبيض شفاف 40%
+                hover:text-white: عند الضم الماوس، يصبح أبيض
+                transition-colors: انتقال سلس للألوان
+                font-['Lexend']: خط مخصص
+                text-sm: نص صغير
+                tracking-tight: مسافات ضيقة
+            -->
+            <a class="text-white/40 hover:text-white transition-colors font-['Lexend'] text-sm tracking-tight" href="#" data-i18n="footer.privacyPolicy">Privacy Policy</a>
+            <a class="text-white/40 hover:text-white transition-colors font-['Lexend'] text-sm tracking-tight" href="#" data-i18n="footer.termsOfService">Terms of Service</a>
+            <a class="text-white/40 hover:text-white transition-colors font-['Lexend'] text-sm tracking-tight" href="#" data-i18n="footer.partnerWithUs">Partner with Us</a>
+            <a class="text-white/40 hover:text-white transition-colors font-['Lexend'] text-sm tracking-tight" href="#" data-i18n="footer.support">Support</a>
+        </div>
+        
+        <!-- 
+            القسم الثالث: أيقونات التواصل
+            flex gap-4: عرض أفقي مع مسافة 1rem بين الأيقونات
+        -->
+        <div class="flex gap-4">
+            <!-- 
+                أيقونة اللغة
+                w-10 h-10: مربع 2.5rem × 2.5rem
+                rounded-full: شكل دائري
+                glass-card: تأثير زجاج شفاف
+                flex items-center justify-center: توسيط الأيقونة بداخلها
+                hover:text-primary: عند الضم الماوس، تتحول للأخضر
+                transition-colors: انتقال سلس
+                cursor-pointer: إشارة يد عند الضم الماوس
+            -->
+            <div class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-primary transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-xl">language</span>
+            </div>
+            <!-- 
+                أيقونة البريد الإلكتروني
+                نفس التأثيرات والأسلوب مع أيقونة بريد
+            -->
+            <div class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-primary transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-xl">mail</span>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="js/script.js"></script>
+</body>
+</html>
+        

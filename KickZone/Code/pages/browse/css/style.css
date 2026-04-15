@@ -1,0 +1,1262 @@
+/**
+ * ========================================
+ * نظام الأنماط الشامل لصفحة تصفح الملاعب
+ * ========================================
+ * لماذا هذا الملف موجود:
+ * - تحديد جميع الألوان والأبعاد المستخدمة في الصفحة
+ * - إنشاء نمط موحد يسهل الصيانة والتعديل
+ * - تطبيق تأثيرات بصرية متقدمة (Glass Effect, شفافيات، إلخ)
+ * - دعم التجاوب (Responsive) على جميع أحجام الشاشات
+ */
+
+/* استيراد الخط المستخدم من جوجل */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+/**
+ * ========================================
+ * المتغيرات اللونية المخصصة (CSS Variables)
+ * ========================================
+ * لماذا موجودة:
+ * - تخزين جميع الألوان في مكان واحد
+ * - سهولة تغيير الألوان عند تطبيق ثيم جديد
+ * - تقليل تكرار الأكواد اللونية
+ * - الالتزام بنظام تصميم موحد (Design System)
+ */
+:root {
+    /* ألوان الخلفية الأساسية */
+    --background: #0a120d; /* لون الخلفية الداكن جداً (تقريباً أسود) */
+    --surface: #0a120d; /* سطح داكن */
+    
+    /* اللون الأساسي (أخضر Spotify) */
+    --primary: #1db954; /* اللون الأخضر للتفاعلات والأزرار الرئيسية */
+    --primary-fixed: #1db954; /* نسخة ثابتة من اللون الأساسي */
+    --on-primary: #0a120d; /* لون النص على اللون الأساسي */
+    --on-primary-fixed: #0a120d; /* لون النص على النسخة الثابتة */
+    
+    /* اللون الثانوي (أخضر فاتح) */
+    --secondary: #99d59d; /* لون ثانوي للتأكيدات */
+    --secondary-fixed: #b5f1b8; /* نسخة ثابتة من اللون الثانوي */
+    --on-secondary: #003914; /* لون النص على اللون الثانوي */
+    --on-secondary-fixed: #002108; /* لون النص على النسخة الثابتة */
+    
+    /* اللون الثالث (وردي) */
+    --tertiary: #ffb3b3; /* لون ثالث للتفاصيل */
+    --tertiary-fixed: #ffdad9; /* نسخة ثابتة */
+    --on-tertiary: #680114; /* لون النص على اللون الثالث */
+    --on-tertiary-fixed: #400009; /* لون النص على النسخة الثابتة */
+    
+    /* ألوان الأخطاء */
+    --error: #ffb4ab; /* لون الأخطاء */
+    --error-container: #93000a; /* حاوية الأخطاء */
+    --on-error: #690005; /* لون النص على الأخطاء */
+    --on-error-container: #ffdad6; /* لون النص على حاوية الأخطاء */
+    
+    /* حدود وخطوط */
+    --outline: rgba(255, 255, 255, 0.1); /* خطوط الحدود الرئيسية */
+    --outline-variant: rgba(255, 255, 255, 0.05); /* خطوط حدود فاتحة */
+    
+    /* الحاويات السطحية (بدرجات شفافية مختلفة) */
+    --surface-container: rgba(255, 255, 255, 0.05); /* حاوية سطح أساسية */
+    --surface-container-low: rgba(255, 255, 255, 0.03); /* حاوية سطح منخفضة الشفافية */
+    --surface-container-high: rgba(255, 255, 255, 0.08); /* حاوية سطح عالية الشفافية */
+    --surface-container-highest: rgba(255, 255, 255, 0.12); /* أعلى شفافية */
+    
+    /* تدرج السطوح */
+    --surface-dim: #0a120d; /* سطح داكن جداً */
+    --surface-bright: #222a24; /* سطح مضاء */
+    --surface-tint: #1db954; /* لون تلوين السطح */
+    --surface-variant: rgba(255, 255, 255, 0.03); /* متغير السطح */
+    
+    /* لون النص */
+    --on-surface: #f1f5f9; /* لون النص الأساسي على السطح */
+    --on-surface-variant: #94a3b8; /* لون النص البديل على السطح */
+    
+    /* الألوان العكسية (للخلفية الفاتحة والنص الداكن) */
+    --inverse-surface: #f1f5f9; /* سطح عكسي فاتح */
+    --inverse-on-surface: #0a120d; /* نص عكسي داكن */
+    --on-background: #f1f5f9; /* لون النص على الخلفية */
+    
+    /* ألوان الحاويات */
+    --on-secondary-container: #8cc690; /* نص على حاوية ثانوية */
+    --on-secondary-fixed-variant: #195127; /* نص بديل على حاوية ثابتة ثانوية */
+    --on-primary-container: #0a120d; /* نص على حاوية أساسية */
+    --on-primary-fixed-variant: #005320; /* نص بديل على حاوية ثابتة أساسية */
+    --on-tertiary-container: #730a1b; /* نص على حاوية ثالثة */
+    --on-tertiary-fixed-variant: #881d28; /* نص بديل على حاوية ثابتة ثالثة */
+    --primary-container: #1db954; /* حاوية أساسية */
+    --primary-fixed-dim: #137c38; /* نسخة داكنة من الثابت الأساسي */
+    --secondary-container: #1c5329; /* حاوية ثانوية */
+    --secondary-fixed-dim: #99d59d; /* نسخة داكنة من الثابت الثانوي */
+    --tertiary-container: #ff767b; /* حاوية ثالثة */
+    --tertiary-fixed-dim: #ffb3b3; /* نسخة داكنة من الثابت الثالث */
+    --inverse-primary: #137c38; /* لون عكسي أساسي */
+    
+    /* الزوايا المستديرة */
+    --border-radius-default: 0.25rem; /* زاوية افتراضية بسيطة */
+    --border-radius-lg: 0.5rem; /* زاوية كبيرة */
+    --border-radius-xl: 0.75rem; /* زاوية كبيرة جداً */
+    --border-radius-full: 9999px; /* زاوية كاملة دائرية */
+}
+
+/**
+ * ========================================
+ * الأنماط الأساسية (Base Styles)
+ * ========================================
+ * لماذا موجودة:
+ * - إعادة تعيين المسافات الافتراضية للعناصر
+ * - تطبيق نمط موحد على جميع العناصر
+ * - تحضير الصفحة لاستقبال الأنماط الأخرى
+ */
+
+/* إعادة تعيين جميع العناصر - لماذا: كل متصفح له قيم افتراضية مختلفة */
+* {
+    margin: 0; /* إزالة الهامش الخارجي */
+    padding: 0; /* إزالة الحشو الداخلي */
+    box-sizing: border-box; /* حساب الحجم يشمل الحدود والحشو */
+}
+
+/* تنسيق الجسم الرئيسي للصفحة */
+body {
+    font-family: 'Lexend', sans-serif; /* تطبيق الخط */
+    background-color: var(--background); /* تطبيق لون الخلفية الداكن */
+    color: var(--on-background); /* تطبيق لون النص الفاتح */
+    line-height: 1.6; /* مسافة السطور لسهولة القراءة */
+    overflow-x: hidden; /* إخفاء شريط التمرير الأفقي */
+}
+
+/**
+ * ========================================
+ * تأثير البطاقة الزجاجية (Glass Morphism)
+ * ========================================
+ * لماذا موجود:
+ * - إنشاء تأثير بصري عصري وجميل
+ * - جعل البطاقات بدون خلفية معتمة (بدلاً من ذلك شفافة)
+ * - إضافة تأثير الضباب (Blur) للعمق البصري
+ */
+.glass-card {
+    background: var(--surface-container); /* خلفية شفافة قليلاً */
+    backdrop-filter: blur(12px); /* تأثير الضباب خلف البطاقة */
+    border: 1px solid var(--outline-variant); /* حد دقيق جداً */
+}
+
+/**
+ * ========================================
+ * أيقونات Material Symbols
+ * ========================================
+ * لماذا موجود:
+ * - تحديد شكل الأيقونات وسمكها وحجمها
+ * - استخدام نمط موحد لجميع الأيقونات
+ */
+.material-symbols-outlined {
+    /* خصائص الأيقونات */
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    /* FILL: 0 (مفرغة، وليست ممتلئة) */
+    /* wght: 400 (وزن خط متوسط) */
+    /* GRAD: 0 (بدون تدرج) */
+    /* opsz: 24 (حجم 24 بكسل) */
+}
+
+/**
+ * ========================================
+ * أنماط الملاحة (Navigation Styles)
+ * ========================================
+ * لماذا موجود:
+ * - تصميم شريط التنقل الثابت في الأعلى
+ * - جعل الملاحة في الأعلى في كل الأوقات (fixed)
+ * - تطبيق تأثيرات بصرية على الملاحة
+ */
+
+/* تثبيت العنصر بدون تحريك */
+.fixed {
+    position: fixed; /* ثابت بالنسبة للنافذة */
+}
+
+/* وضع العنصر في الأعلى */
+.top-0 {
+    top: 0;
+}
+
+/* وضع العنصر على اليسار */
+.left-0 {
+    left: 0;
+}
+
+/* وضع العنصر في الأيمن */
+.right-0 {
+    right: 0;
+}
+
+/* طبقة بعيدة في الأعلى (ظهور فوق جميع العناصر) */
+.z-50 {
+    z-index: 50;
+}
+
+/* خلفية شفافة مع هالة سوداء */
+.bg-\[\#0a120d\]\/80 {
+    background-color: rgba(10, 18, 13, 0.8); /* أسود شفاف 80% */
+}
+
+/* تأثير الضباب على الخلفية */
+.backdrop-blur-xl {
+    backdrop-filter: blur(16px); /* ضباب فيسكوز وراء العنصر */
+}
+
+/* حد سفلي */
+.border-b {
+    border-bottom-width: 1px;
+}
+
+/* حد لون أبيض بشفافية 5% */
+.border-white\/5 {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ظل أخضر يشع */
+.shadow-\[0_0_15px_rgba\(29\,185\,84\,0\.1\)\] {
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.1); /* لون أخضري */
+}
+
+/**
+ * ========================================
+ * نظام المرونة والتخطيط (Flexbox)
+ * ========================================
+ * لماذا موجود:
+ * - ترتيب العناصر بشكل مفيد (أفقي أو عمودي)
+ * - توزيع المسافات بين العناصر
+ * - محاذاة العناصر بسهولة
+ */
+
+/* عرض بصيغة أفقية */
+.flex {
+    display: flex;
+}
+
+/* توزيع العناصر على حافتي الحاوية */
+.justify-between {
+    justify-content: space-between;
+}
+
+/* محاذاة العناصر في المركز عمودياً */
+.items-center {
+    align-items: center;
+}
+
+/* عرض كامل للحاوية */
+.w-full {
+    width: 100%;
+}
+
+/**
+ * ========================================
+ * نظام المسافات (Spacing System)
+ * ========================================
+ * لماذا موجود:
+ * - تحديد المسافات الداخلية والخارجية
+ * - نظام متدرج للمسافات (0.5rem, 1rem, 1.5rem, إلخ)
+ */
+
+/* حشو على يسار ويمين 1.5rem */
+.px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+/* حشو على أعلى وأسفل 1rem */
+.py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* أقصى عرض للشاشات الكبيرة */
+.max-w-screen-2xl {
+    max-width: 96rem;
+}
+
+/* توسيط العنصر أفقياً */
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/**
+ * ========================================
+ * نظام الفجوات (Gap System)
+ * ========================================
+ * لماذا موجود:
+ * - تحديد المسافات بين العناصر الفرعية
+ * - إنشاء شبكة منظمة من العناصر
+ */
+
+/* فجوة 2rem بين العناصر */
+.gap-8 {
+    gap: 2rem;
+}
+
+/* فجوة 1.5rem بين العناصر */
+.gap-6 {
+    gap: 1.5rem;
+}
+
+/**
+ * ========================================
+ * نظام الطباعة (Typography)
+ * ========================================
+ * لماذا موجود:
+ * - تحديد أحجام ووزن الخطوط
+ * - توحيد الأنماط النصية
+ */
+
+/* حجم نص 1.5rem (نص كبير للعناوين) */
+.text-2xl {
+    font-size: 1.5rem;
+}
+
+/* حجم نص صغير 0.875rem */
+.text-sm {
+    font-size: 0.875rem;
+}
+
+/* وزن الخط 900 (أغمق وزن) */
+.font-black {
+    font-weight: 900;
+}
+
+/* وزن الخط 700 (غامق) */
+.font-bold {
+    font-weight: 700;
+}
+
+/* وزن الخط 500 (متوسط) */
+.font-medium {
+    font-weight: 500;
+}
+
+/* نوع الخط Lexend */
+.font-\[\'Lexend\'\] {
+    font-family: 'Lexend', sans-serif;
+}
+
+/* تحويل النص لأحرف كبيرة */
+.uppercase {
+    text-transform: uppercase;
+}
+
+/* تباعد حروف أوسع */
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+/**
+ * ========================================
+ * الألوان النصية (Text Colors)
+ * ========================================
+ * لماذا موجود:
+ * - تحديد ألوان النصوص
+ * - تطبيق درجات مختلفة من الشفافية
+ */
+
+/* اللون الأخضر الأساسي */
+.text-\[\#1db954\] {
+    color: var(--primary);
+}
+
+/* لون أبيض بشفافية 70% (رمادي فاتح) */
+.text-white\/70 {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/**
+ * ========================================
+ * التأثيرات البصرية (Visual Effects)
+ * ========================================
+ * لماذا موجود:
+ * - إضافة ظلال وإضاءات
+ * - تحسين العمق البصري
+ */
+
+/* ظل أخضر يشع بشدة */
+.drop-shadow-\[0_0_10px_rgba\(29\,185\,84\,0\.4\)\] {
+    box-shadow: 0 0 10px rgba(29, 185, 84, 0.4);
+}
+
+/**
+ * ========================================
+ * الانتقالات السلسة (Transitions)
+ * ========================================
+ * لماذا موجود:
+ * - إضافة حركات سلسة للتغييرات
+ * - تحسين تفاعل المستخدم
+ */
+
+/* انتقال سلس لتغيير اللون */
+.transition-colors {
+    transition: color 0.3s ease;
+}
+
+/* انتقال سلس لجميع الخصائص */
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/**
+ * ========================================
+ * الإظهار والإخفاء (Display)
+ * ========================================
+ * لماذا موجود:
+ * - إظهار أو إخفاء العناصر
+ */
+
+/* إخفاء العنصر تماماً */
+.hidden {
+    display: none;
+}
+
+/**
+ * ========================================
+ * الاستجابة للشاشات (Responsive)
+ * ========================================
+ * لماذا موجود:
+ * - تطبيق أنماط مختلفة حسب حجم الشاشة
+ * - جعل الموقع يعمل على الهواتف والحواسيب
+ */
+
+/* عرض العنصر كـ Flex في الشاشات المتوسطة فما فوق */
+.md\:flex {
+    display: flex;
+}
+
+/**
+ * ========================================
+ * حالات التفاعل (Hover States)
+ * ========================================
+ * لماذا موجود:
+ * - إضافة تأثير عند تمرير الماوس
+ * - تحسين تجربة المستخدم التفاعلية
+ */
+
+/* تغيير اللون عند تمرير الماوس */
+.hover\:text-white:hover {
+    color: rgb(255, 255, 255);
+}
+
+/* تغيير الخلفية عند التمرير */
+.hover\:bg-white\/10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* تغيير الحد عند التمرير */
+.hover\:border-primary\/50:hover {
+    border-color: rgba(29, 185, 84, 0.5);
+}
+
+
+.border-b-2 {
+    border-bottom-width: 2px;
+}
+
+.border-\[\#1db954\] {
+    border-color: var(--primary);
+}
+
+.pb-1 {
+    padding-bottom: 0.25rem;
+}
+
+/* Search Input */
+.relative {
+    position: relative;
+}
+
+.sm\:block {
+    display: block;
+}
+
+.left-3 {
+    left: 0.75rem;
+}
+
+.top-1\/2 {
+    top: 50%;
+}
+
+.-translate-y-1\/2 {
+    transform: translateY(-50%);
+}
+
+.text-white\/40 {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.bg-white\/5 {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.border-none {
+    border: none;
+}
+
+.rounded-full {
+    border-radius: var(--border-radius-full);
+}
+
+.pl-10 {
+    padding-left: 2.5rem;
+}
+
+.pr-4 {
+    padding-right: 1rem;
+}
+
+.py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.focus\:ring-1:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary);
+}
+
+.focus\:ring-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary);
+}
+
+.w-64 {
+    width: 16rem;
+}
+
+.text-white {
+    color: rgb(255, 255, 255);
+}
+
+.placeholder-white\/30::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Buttons */
+.p-2 {
+    padding: 0.5rem;
+}
+
+.hover\:text-\[\#1db954\]:hover {
+    color: var(--primary);
+}
+
+/* Main Content */
+.pt-24 {
+    padding-top: 6rem;
+}
+
+.pb-20 {
+    padding-bottom: 5rem;
+}
+
+.px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.max-w-screen-2xl {
+    max-width: 96rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mb-12 {
+    margin-bottom: 3rem;
+}
+
+.text-3xl {
+    font-size: 1.875rem;
+}
+
+.md\:text-5xl {
+    font-size: 3rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.text-on-surface-variant {
+    color: var(--on-surface-variant);
+}
+
+.max-w-2xl {
+    max-width: 42rem;
+}
+
+/* Hero Section */
+.mb-12 {
+    margin-bottom: 3rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-white {
+    color: rgb(255, 255, 255);
+}
+
+/* Grid Cards */
+.grid {
+    display: grid;
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.group {
+    position: relative;
+}
+
+.relative {
+    position: relative;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.rounded-xl {
+    border-radius: var(--border-radius-xl);
+}
+
+.aspect-\[4\/3\] {
+    aspect-ratio: 4/3;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.border-2 {
+    border-width: 2px;
+}
+
+.border-primary {
+    border-color: var(--primary);
+}
+
+.shadow-\[0_0_20px_rgba\(29\,185\,84\,0\.1\)\] {
+    box-shadow: 0 0 20px rgba(29, 185, 84, 0.1);
+}
+
+/* Card Hover Effects */
+.group:hover .group-hover\:scale-110 {
+    transform: scale(1.1);
+}
+
+.transition-transform {
+    transition: transform 0.7s ease;
+}
+
+.duration-700 {
+    transition-duration: 700ms;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.bg-cover {
+    background-size: cover;
+}
+
+.bg-center {
+    background-position: center;
+}
+
+.bg-gradient-to-t {
+    background-image: linear-gradient(to top, var(--background), var(--background) 20%, transparent 80%);
+}
+
+.from-background {
+    --gradient-from: var(--background);
+}
+
+.via-background\/20 {
+    --gradient-via: rgba(10, 18, 13, 0.2);
+}
+
+.to-transparent {
+    --gradient-to: transparent;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.p-5 {
+    padding: 1.25rem;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+}
+
+.font-black {
+    font-weight: 900;
+}
+
+.group:hover .group-hover\:text-primary {
+    color: var(--primary);
+}
+
+.transition-colors {
+    transition: color 0.3s ease;
+}
+
+/* Active Selection */
+.absolute {
+    position: absolute;
+}
+
+.top-4 {
+    top: 1rem;
+}
+
+.right-4 {
+    right: 1rem;
+}
+
+.bg-primary {
+    background-color: var(--primary);
+}
+
+.text-on-primary {
+    color: var(--on-primary);
+}
+
+.rounded-full {
+    border-radius: var(--border-radius-full);
+}
+
+.p-1 {
+    padding: 0.25rem;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+/* District Buttons */
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-3 {
+    gap: 0.75rem;
+}
+
+.px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.rounded-full {
+    border-radius: var(--border-radius-full);
+}
+
+.shadow-\[0_0_15px_rgba\(29\,185\,84\,0\.3\)\] {
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.3);
+}
+
+.transition-transform {
+    transition: transform 0.3s ease;
+}
+
+.active\:scale-95:active {
+    transform: scale(0.95);
+}
+
+.text-white {
+    color: rgb(255, 255, 255);
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.hover\:bg-white\/10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Results Section */
+.mb-16 {
+    margin-bottom: 4rem;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-white {
+    color: rgb(255, 255, 255);
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+/* Pitch Cards */
+.gap-8 {
+    gap: 2rem;
+}
+
+.group:hover .group-hover\:-translate-y-2 {
+    transform: translateY(-0.5rem);
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+.duration-300 {
+    transition-duration: 300ms;
+}
+
+.aspect-video {
+    aspect-ratio: 16/9;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.object-cover {
+    object-fit: cover;
+}
+
+.top-4 {
+    top: 1rem;
+}
+
+.left-4 {
+    left: 1rem;
+}
+
+.bg-primary\/20 {
+    background-color: rgba(29, 185, 84, 0.2);
+}
+
+.backdrop-blur-md {
+    backdrop-filter: blur(8px);
+}
+
+.px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.py-1 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.rounded {
+    border-radius: var(--border-radius-default);
+}
+
+.text-\[10px\] {
+    font-size: 10px;
+}
+
+.border {
+    border-width: 1px;
+}
+
+.border-primary\/30 {
+    border-color: rgba(29, 185, 84, 0.3);
+}
+
+.bottom-4 {
+    bottom: 1rem;
+}
+
+.right-4 {
+    right: 1rem;
+}
+
+.bg-background\/80 {
+    background-color: rgba(10, 18, 13, 0.8);
+}
+
+.rounded-lg {
+    border-radius: var(--border-radius-lg);
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+}
+
+.text-white\/60 {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ml-1 {
+    margin-left: 0.25rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.text-base {
+    font-size: 1rem;
+}
+
+.mr-1 {
+    margin-right: 0.25rem;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.rounded-xl {
+    border-radius: var(--border-radius-xl);
+}
+
+.shadow-\[0_0_15px_rgba\(29\,185\,84\,0\.2\)\] {
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.2);
+}
+
+.w-12 {
+    width: 3rem;
+}
+
+.h-12 {
+    height: 3rem;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.hover\:text-primary:hover {
+    color: var(--primary);
+}
+
+/* Footer */
+.bg-\[\#0a120d\] {
+    background-color: var(--background);
+}
+
+.border-t {
+    border-top-width: 1px;
+}
+
+.py-12 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-\[\#1db954\] {
+    color: var(--primary);
+}
+
+.font-\[\'Lexend\'\] {
+    font-family: 'Lexend', sans-serif;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.text-white\/40 {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.text-xs {
+    font-size: 0.75rem;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.gap-8 {
+    gap: 2rem;
+}
+
+.w-10 {
+    width: 2.5rem;
+}
+
+.h-10 {
+    height: 2.5rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .md\:flex {
+        display: flex;
+    }
+    
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    
+    .lg\:grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .sm\:block {
+        display: block;
+    }
+    
+    .grid-cols-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    .lg\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Selection Styles */
+.selection\:bg-primary ::selection {
+    background-color: var(--primary);
+}
+
+.selection\:text-on-primary ::selection {
+    color: var(--on-primary);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--surface-dim);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-fixed);
+}
